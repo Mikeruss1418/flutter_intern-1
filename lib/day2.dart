@@ -13,19 +13,19 @@ class App extends StatelessWidget {
     return const MaterialApp(
       title: '',
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: Day2(),
     );
   }
 }
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class Day2 extends StatefulWidget {
+  const Day2({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Day2> createState() => _Day2State();
 }
 
-class _HomeState extends State<Home> {
+class _Day2State extends State<Day2> {
   Color icolor = const Color.fromARGB(255, 80, 76, 65);
   Text itxt = const Text('Click me');
   int index = 0;

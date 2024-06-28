@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class Custom_scroll extends StatefulWidget {
-  const Custom_scroll({super.key});
+class Customscroll extends StatefulWidget {
+  const Customscroll({super.key});
 
   @override
-  State<Custom_scroll> createState() => _HomeState();
+  State<Customscroll> createState() => _HomeState();
 }
 
-class _HomeState extends State<Custom_scroll> {
+class _HomeState extends State<Customscroll> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
-        title: Text('ScrollView'),
+        title: const Text('ScrollView'),
       ),
       body: CustomScrollView(
         slivers: [
           //
-          SliverAppBar(
+          const SliverAppBar(
             automaticallyImplyLeading: false,
             expandedHeight: 160, // it sets the
             backgroundColor: Colors.green,
@@ -45,7 +44,7 @@ class _HomeState extends State<Custom_scroll> {
 
           //this provides padding to the next widget
 
-          SliverAppBar(
+          const SliverAppBar(
             primary: true,
             pinned: true,
             automaticallyImplyLeading: false,
@@ -54,26 +53,26 @@ class _HomeState extends State<Custom_scroll> {
               style: TextStyle(color: Colors.black),
             ),
           ),
-          SliverPadding(padding: EdgeInsets.only(top: 20)),
+          const SliverPadding(padding: EdgeInsets.only(top: 20)),
           SliverToBoxAdapter(
             child: SizedBox(
               height: 600,
               child: ListView.builder(
                   itemBuilder: (context, index) {
                     return ListTile(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
                       //provides gap between the titles and other like trailing/leading
-                      leading: Icon(Icons.account_circle_rounded),
+                      leading: const Icon(Icons.account_circle_rounded),
                       title: Text('Person ${index + 1}'),
-                      subtitle: Text('Phone No....'),
+                      subtitle: const Text('Phone No....'),
                     );
                   },
                   itemCount: 10),
             ),
           ),
 
-          SliverFillRemaining(
+          const SliverFillRemaining(
             hasScrollBody: false, //this is to stop the overscroll
             fillOverscroll: true,
             child: Center(child: Text("This is End")),

@@ -13,19 +13,19 @@ class App extends StatelessWidget {
     return const MaterialApp(
       title: '',
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: Day3(),
     );
   }
 }
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class Day3 extends StatefulWidget {
+  const Day3({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Day3> createState() => _Day3State();
 }
 
-class _HomeState extends State<Home> {
+class _Day3State extends State<Day3> {
   bool show = true;
   var date = DateFormat('yMMMMdd').format(DateTime.now());
 

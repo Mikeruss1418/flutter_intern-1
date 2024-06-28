@@ -18,19 +18,19 @@ class App extends StatelessWidget {
     return const MaterialApp(
       title: 'Assesment 4',
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: Day4(),
     );
   }
 }
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class Day4 extends StatefulWidget {
+  const Day4({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Day4> createState() => _Day4State();
 }
 
-class _HomeState extends State<Home> {
+class _Day4State extends State<Day4> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>const Custom_scroll(),
+                              builder: (context) =>const Customscroll(),
                             ));
                       },
                       child: const Icon(Icons.add_link_outlined))
