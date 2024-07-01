@@ -217,7 +217,7 @@ class _Tabs4State extends State<Tabs4> {
                 ),
                 Divider(
                   color: _color[1],
-                  thickness: 5,
+                  thickness: 10,
                   height: 25,
                 ),
                 Expanded(
