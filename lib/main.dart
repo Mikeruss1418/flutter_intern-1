@@ -1,7 +1,7 @@
 // import 'dart:developer';
 
-import 'package:day5/day6.dart';
 // import 'package:day5/widgets/splash.dart';
+import 'package:day5/usercv_day6.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +18,7 @@ class App extends StatelessWidget {
     return const MaterialApp(
       title: ' CV Form',
       debugShowCheckedModeBanner: false,
-      home: Day6(),
+      home: UserCV(),
     );
   }
 }
