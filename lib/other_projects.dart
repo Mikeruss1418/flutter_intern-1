@@ -1,10 +1,7 @@
-
 import 'package:day5/models/other_model.dart';
 import 'package:day5/project.dart';
 import 'package:day5/widgets/pro.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
 class Otherproject extends StatefulWidget {
   const Otherproject({super.key, required this.onSubmit});
@@ -18,11 +15,6 @@ class _OtherprojectState extends State<Otherproject> {
   bool isSwitched = false;
   //
   List<OthersModel> otherList = [];
-  //
-
-  //
-
-  //
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +46,8 @@ class _OtherprojectState extends State<Otherproject> {
                       builder: (context) => Projects(
                         onSubmit: (othersModel) {
                           setState(() {
-                            if(otherList.isNotEmpty) {
-
-                            otherList.add(othersModel);
+                            if (otherList.isNotEmpty) {
+                              otherList.add(othersModel);
                             }
                           });
                           widget.onSubmit(othersModel);

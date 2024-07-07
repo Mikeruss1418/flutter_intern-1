@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
-
 import 'package:day5/exp.dart';
 import 'package:day5/fluuter.dart';
 import 'package:day5/models/exp_model.dart';
@@ -15,7 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'next_page.dart';
+
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
@@ -68,12 +66,12 @@ class _UserCVState extends State<UserCV> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // routeObserver.subscribe(this, ModalRoute.of(context)!);
+    
   }
 
   @override
   void dispose() {
-    routeObserver.unsubscribe(this as RouteAware);
+    // routeObserver.unsubscribe(this as RouteAware);
     fname.dispose();
     mname.dispose();
     lname.dispose();
@@ -613,6 +611,7 @@ class _UserCVState extends State<UserCV> {
                                         _selectedgender = null;
                                         selectedchip.clear();
                                         sinterest.clear();
+                                        
                                         slanguages.clear();
                                         sdate = null;
                                         edate = null;
