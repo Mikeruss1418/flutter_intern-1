@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'dart:io';
 
 import 'package:day5/dashboard.dart';
 import 'package:day5/login.dart';
+import 'package:day5/models/signup_model.dart';
+import 'package:day5/sharedforsignup.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +24,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _HomeState extends State<SignUp> {
+  SaveModel? saveModel;
   final _formKey = GlobalKey<FormState>();
   TextEditingController fullname = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -29,7 +35,7 @@ class _HomeState extends State<SignUp> {
   String? maritalstatus;
   DateTime? dob;
   //index for bottom navigation
-  int selectedindex = 0;
+
   //for password
   bool obscure = false;
   //for imagepicker
@@ -38,12 +44,9 @@ class _HomeState extends State<SignUp> {
   // FilePickerResult? cvfile;
   File? image;
   File? cv;
+  // String? imagepath;
 
-  void ontap(int index) {
-    setState(() {
-      selectedindex = index;
-    });
-  }
+  //
 
   @override
   void initState() {
@@ -51,21 +54,46 @@ class _HomeState extends State<SignUp> {
     load();
   }
 
-  void load() async {
+  Future<void> save(SaveModel model) async {
+    Helper().addUserModel(model);
+    //SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String cvString = json.encode(model.toJson());
+    // log(cvString);
+    // await prefs.setString('user_data', cvString);
+  }
+
+  Future<void> load() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      final fullname = prefs.getString('fullname') ?? '';
-      final gender = prefs.getString('gender') ?? '';
-      final dob = prefs.getString('dob') ?? '';
-      final mobile = prefs.getString('mobile') ?? '';
-      final maritalstatus = prefs.getString('maritalstatus') ?? '';
-      final email = prefs.getString('email') ?? '';
-      final password = prefs.getString('password') ?? '';
-    });
+    String? jsonmodel = prefs.getString('user_data');
+    if (jsonmodel != null) {
+      setState(() {
+        //instance of ExpModel
+        saveModel = SaveModel.fromJson(jsonDecode(jsonmodel));
+        log(jsonmodel);
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    fullname.dispose();
+    email.dispose();
+    password.dispose();
+    mobile.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    String? imagepath;
+    String? cvpath;
+    Directory directoryimage;
+    Directory directorycv;
     return Scaffold(
       // backgroundColor: const Color.fromARGB(255, 49, 54, 57),
       appBar: AppBar(
@@ -73,6 +101,31 @@ class _HomeState extends State<SignUp> {
         title: const Row(mainAxisAlignment: MainAxisAlignment.end, children: [
           Text('CV Form'),
         ]),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            const DrawerHeader(
+                decoration: BoxDecoration(),
+                curve: Curves.easeIn,
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      'https://www.publicdomainpictures.net/pictures/170000/velka/landschaft-1463581037RbE.jpg'),
+                  // child: ,
+                )),
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Dashboard(),
+                    ));
+              },
+              leading: const Icon(Icons.dashboard),
+              title: const Text("dashboard"),
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
@@ -211,18 +264,6 @@ class _HomeState extends State<SignUp> {
                 decoration: const InputDecoration(
                   label: Text('Password'),
                   prefixIcon: Icon(Icons.password_outlined),
-                  // suffixIcon: IconButton(
-                  //     onPressed: () {
-                  //       if (obscure == false) {
-                  //         setState(() {
-                  //           obscure = true;
-                  //         });
-                  //       }
-                  //     },
-                  //     icon: Icon(obscure == false
-                  //         ? Icons.visibility_off
-                  //         : Icons.visibility),
-                  //         ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -238,33 +279,37 @@ class _HomeState extends State<SignUp> {
                 children: [
                   TextButton.icon(
                       onPressed: () async {
-                        XFile? gallery =
+                        var gallery =
                             await picker.pickImage(source: ImageSource.gallery);
                         if (gallery != null) {
                           setState(() {
-                            image = File(gallery
-                                .path); // the path keyword gets the path of the pickedimage
+                            // image = gallery;
+                            // saveModel =SaveModel(imagepath: gallery.path);
+                            image = File(gallery.path);
+                            // the path keyword gets the path of the pickedimage
                           });
                         }
                       },
                       icon: const Icon(Icons.image),
                       label: const Text('Upload Image')),
-                      
                   TextButton.icon(
                       onPressed: () async {
                         XFile? camera =
                             await picker.pickImage(source: ImageSource.camera);
                         if (camera != null) {
                           setState(() {
+                            // image = camera;
+                            // saveModel=SaveModel(imagepath: camera.path);
                             image = File(camera.path);
                           });
+                          //
                         }
                       },
                       icon: const Icon(Icons.camera_alt_outlined),
                       label: const Text('Take a Picture')),
                 ],
               ),
-              
+              image == null ? Container() : Image.file(image!),
               Center(
                 child: TextButton.icon(
                   icon: const Icon(Icons.picture_as_pdf_outlined),
@@ -276,6 +321,7 @@ class _HomeState extends State<SignUp> {
                     if (cvfile != null) {
                       setState(() {
                         cv = File(cvfile.files.single.path!);
+
                         print('$cv');
                       });
                     } else {
@@ -285,48 +331,49 @@ class _HomeState extends State<SignUp> {
                     }
                   },
                 ),
-               
               ),
-               cv == null ? Container() : const Text('CV Uploaded'),
-              
+              cv == null ? Container() : const Text('CV Uploaded'),
               ElevatedButton(
                   onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
                     if (_formKey.currentState!.validate() && dob != null) {
-                      print("gooodddddddddddddddddddddd");
-                      print('$cv');
-                      print('$image');
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      await prefs.setString('fullname', fullname.text);
-                      await prefs.setString('gender', gender!);
-                      await prefs.setString('dob', dob.toString());
-                      await prefs.setString('mobile', mobile.text);
-                      await prefs.setString('maritalstatus', maritalstatus!);
-                      await prefs.setString('email', email.text);
-                      await prefs.setString('password', password.text);
+                      String? imagebase64;
                       if (image != null) {
-                        //getting a directory to save
-                        Directory directory =
-                            await getApplicationDocumentsDirectory();
-                        //set a new path with addition of /image.png
-                        final imagepath = '${directory.path}/image.png';
-                        //copy the path
-                        await image!.copy(imagepath);
-                        await prefs.setString('imagepath', imagepath);
-                      }
-                      if (cv != null) {
-                        Directory directory =
-                            await getApplicationDocumentsDirectory();
-                        final cvpath = '${directory.path}/cv.pdf';
-                        await cv!.copy(cvpath);
-                        await prefs.setString('cvpath', cvpath);
+                        List<int> imagesbytes = await image!.readAsBytes();
+                        imagebase64 = base64Encode(imagesbytes);
                       }
 
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Login(),
-                          ));
+                      if (cv != null) {
+                        directorycv = await getApplicationDocumentsDirectory();
+                        cvpath = '${directorycv.path}/cv.pdf';
+                        await cv!.copy(cvpath!);
+                      }
+                      SaveModel model = SaveModel(
+                        fullname: fullname.text,
+                        maritalstatus: maritalstatus ?? '',
+                        email: email.text,
+                        dob: dob!.toString(),
+                        password: password.text,
+                        mobile: mobile.text,
+                        gender: gender ?? '',
+                        imagebase64: imagebase64,
+                        cvpath: cvpath,
+                      );
+                      save(model);
+                      setState(() {
+                        fullname.clear();
+                        gender = null;
+                        dob = null;
+                        mobile.clear();
+                        maritalstatus = null;
+                        email.clear();
+                        password.clear();
+                        image = null;
+                        // cv = null;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Data Saved')),
+                      );
                     }
                   },
                   child: const Text('Submit'))
@@ -336,41 +383,35 @@ class _HomeState extends State<SignUp> {
       ),
 
       ////
-      drawer: Drawer(
-        child: ListView(
-          children: const [
-            DrawerHeader(child: Text('Drawer')),
-            // UserAccountsDrawerHeader(
-            //   accountName: Text(fullname.text),
-            //   accountEmail: Text(email.text),
-            // ),
-            ListTile(title: Text('Home')),
-            ListTile(
-              title: Text('Login'),
-            ),
-            ListTile(
-              title: Text("dashboard"),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: ontap,
-        iconSize: 20,
-        elevation: 4,
-        type: BottomNavigationBarType.shifting,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.login),
-              label: "Login",
-              backgroundColor: Colors.blueGrey),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Home",
-              backgroundColor: Colors.amber)
-        ],
-        currentIndex: selectedindex,
-      ),
     );
   }
 }
+// Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => const Login(),
+                      //     ));
+                      //}
+                      // if (_formKey.currentState!.validate() &&
+                    //     dob != null &&
+                    //     image != null) {
+                    //   final directory =
+                    //       await getApplicationDocumentsDirectory();
+                    //   final imagepath = '${directory.path}/image.png';
+                    //   await image!.copy(imagepath!);
+                    //   await prefs.setString('imagepath', imagepath);
+
+                    //   SaveModel model = SaveModel(
+                    //     fullname: fullname.text,
+                    //     maritalstatus: maritalstatus,
+                    //     email: email.text,
+                    //     dob: dob!.toString(),
+                    //     password: password.text,
+                    //     mobile: mobile.text,
+                    //     gender: gender,
+                    //     imagepath: image!.path,
+                    //     cvpath: cv!.path,
+                    //   );
+                    //   save(model);
+
+                    // }

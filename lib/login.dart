@@ -1,4 +1,6 @@
 import 'package:day5/dashboard.dart';
+import 'package:day5/models/signup_model.dart';
+import 'package:day5/sharedforsignup.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,40 +29,54 @@ class Login extends StatefulWidget {
 }
 
 class _HomeState extends State<Login> {
+  List<SaveModel> modelList = [];
   @override
   void initState() {
     super.initState();
-    // load();
+    load();
   }
 
-  // void load() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     final fullname = prefs.getString('fullname') ?? '';
-  //     final gender = prefs.getString('gender') ?? '';
-  //     final dob = prefs.getString('dob') ?? '';
-  //     final mobile = prefs.getString('mobile') ?? '';
-  //     final maritalstatus = prefs.getString('maritalstatus') ?? '';
-  //     final email = prefs.getString('email') ?? '';
-  //     final password = prefs.getString('password') ?? '';
-  //   });
-  // }
+  Future<void> load() async {
+    Helper helper = Helper();
+    List<SaveModel> loadModelList = await helper.getModelList();
+    setState(() {
+      modelList = loadModelList;
+    });
+  }
 
   final _formKey = GlobalKey<FormState>();
   TextEditingController confirmemail = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
+  SaveModel sModel = SaveModel();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Title'),
+          title: const Text(
+            'Login',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+          ),
         ),
         body: Padding(
           padding: EdgeInsets.all(25.0),
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  height: 80,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      // color: Colors.white
+                    ),
+                  ),
+                ),
                 TextFormField(
                   controller: confirmemail,
                   maxLines: 1,
@@ -78,6 +94,9 @@ class _HomeState extends State<Login> {
                     }
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: confirmpassword,
                   maxLines: 1,
@@ -85,18 +104,6 @@ class _HomeState extends State<Login> {
                   decoration: const InputDecoration(
                     label: Text('Password'),
                     prefixIcon: Icon(Icons.password_outlined),
-                    // suffixIcon: IconButton(
-                    //     onPressed: () {
-                    //       if (obscure == false) {
-                    //         setState(() {
-                    //           obscure = true;
-                    //         });
-                    //       }
-                    //     },
-                    //     icon: Icon(obscure == false
-                    //         ? Icons.visibility_off
-                    //         : Icons.visibility),
-                    //         ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -106,21 +113,33 @@ class _HomeState extends State<Login> {
                     }
                   },
                 ),
-                ElevatedButton(
-                    onPressed: () async {
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        final prefs = await SharedPreferences.getInstance();
-                        final email = prefs.getString('email');
-                        final password = prefs.getString('password');
-                        //
-                        if (confirmemail.text == email &&
-                            confirmpassword.text == password) {
-                          Navigator.pushReplacement(
+                        //here check is used as a flag to indicate that match is found
+                        bool check = false;
+                        //innitially ther boolen is set to false indicating that match is ot found
+
+                        for (var e in modelList) {
+                          if (e.email == confirmemail.text &&
+                              e.password == confirmpassword.text) {
+                            check = true;
+                            // if the if statement is satisfied check is changed to true which executes tha break statement
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const Dashboard(),
-                              ));
-                        } else {
+                              ),
+                            );
+                            break; // \
+                          }
+                        }
+                        // even after the whole list is iterated, and the value is not found then only the dialog box is executes
+                        if (!check) {
                           showDialog(
                             context: context,
                             builder: (context) {
@@ -130,10 +149,11 @@ class _HomeState extends State<Login> {
                                     "The email and password didn't match"),
                                 actions: [
                                   TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('ok'))
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('ok'),
+                                  ),
                                 ],
                               );
                             },
@@ -141,7 +161,9 @@ class _HomeState extends State<Login> {
                         }
                       }
                     },
-                    child: const Text('Submit'))
+                    child: const Text('Submit'),
+                  ),
+                ),
               ],
             ),
           ),

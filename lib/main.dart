@@ -1,6 +1,7 @@
 // import 'dart:developer';
 
 // import 'package:day5/widgets/splash.dart';
+import 'package:day5/home.dart';
 import 'package:day5/practices/imagespicker.dart';
 import 'package:day5/signup.dart';
 import 'package:day5/usercv_day6.dart';
@@ -14,14 +15,12 @@ void main() {
 class App extends StatelessWidget {
   const App({super.key});
 
-  
-
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: ' CV Form',
       debugShowCheckedModeBanner: false,
-      home: SignUp(),
+      home: HomePage(),
     );
   }
 }
