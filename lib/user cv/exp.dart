@@ -1,6 +1,7 @@
 // import 'package:day5/day6.dart';
 
-import 'package:day5/models/exp_model.dart';
+// import 'package:day5/models/exp_model.dart';
+import 'package:day5/user%20cv/models/exp_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';

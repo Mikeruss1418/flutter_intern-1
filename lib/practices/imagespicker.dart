@@ -127,7 +127,8 @@ class _HomeState extends State<Imagepicker> {
                   onPressed: () async {
                     FilePickerResult? filepick = await FilePicker.platform
                         .pickFiles(
-                            type: FileType.custom, allowedExtensions: ['pdf']);
+                            type: FileType.custom, allowedExtensions: ['pdf'],
+                             );
                     if (filepick != null) {
                       File file = File(filepick.files.single.path!);
                     } else {

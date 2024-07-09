@@ -1,10 +1,11 @@
 // import 'dart:developer';
 
 // import 'package:day5/widgets/splash.dart';
-import 'package:day5/home.dart';
+// import 'package:day5/home.dart';
 import 'package:day5/practices/imagespicker.dart';
-import 'package:day5/signup.dart';
-import 'package:day5/usercv_day6.dart';
+// import 'package:day5/signup.dart';
+import 'package:day5/signup/home.dart';
+// import 'package:day5/usercv_day6.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

@@ -1,6 +1,8 @@
-import 'package:day5/dashboard.dart';
-import 'package:day5/login.dart';
-import 'package:day5/signup.dart';
+// import 'package:day5/dashboard.dart';
+// import 'package:day5/login.dart';
+// import 'package:day5/signup.dart';
+import 'package:day5/signup/login.dart';
+import 'package:day5/signup/signup.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

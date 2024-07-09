@@ -1,13 +1,21 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:day5/exp.dart';
-import 'package:day5/fluuter.dart';
-import 'package:day5/models/exp_model.dart';
-import 'package:day5/models/for_project.dart';
-import 'package:day5/models/other_model.dart';
-import 'package:day5/other_projects.dart';
-import 'package:day5/sharedpreferences.dart';
-import 'package:day5/widgets/work.dart';
+// import 'package:day5/exp.dart';
+// import 'package:day5/fluuter.dart';
+// import 'package:day5/models/exp_model.dart';
+// import 'package:day5/models/for_project.dart';
+// import 'package:day5/models/other_model.dart';
+// import 'package:day5/other_projects.dart';
+// import 'package:day5/sharedpreferences.dart';
+// import 'package:day5/widgets/work.dart';
+import 'package:day5/user%20cv/exp.dart';
+import 'package:day5/user%20cv/fluuter.dart';
+import 'package:day5/user%20cv/models/exp_model.dart';
+import 'package:day5/user%20cv/models/for_project.dart';
+import 'package:day5/user%20cv/models/other_model.dart';
+import 'package:day5/user%20cv/other_projects.dart';
+import 'package:day5/user%20cv/sharedpreferences.dart';
+import 'package:day5/user%20cv/widgets/work.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -617,11 +625,11 @@ class _UserCVState extends State<UserCV> {
                                         edate = null;
                                         workExpList.clear();
                                         // otherList.clear();
-                                        for (String key
+                                        for (var key
                                             in interest.keys.toList()) {
                                           interest[key] = false;
                                         }
-                                        for (String key
+                                        for (var key
                                             in languages.keys.toList()) {
                                           languages[key] = false;
                                         }

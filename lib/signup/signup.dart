@@ -3,10 +3,13 @@ import 'dart:developer';
 
 import 'dart:io';
 
-import 'package:day5/dashboard.dart';
-import 'package:day5/login.dart';
-import 'package:day5/models/signup_model.dart';
-import 'package:day5/sharedforsignup.dart';
+// import 'package:day5/dashboard.dart';
+// import 'package:day5/login.dart';
+//  import 'package:day5/models/signup_model.dart';
+// import 'package:day5/sharedforsignup.dart';
+import 'package:day5/signup/dashboard.dart';
+import 'package:day5/signup/sharedforsignup.dart';
+import 'package:day5/signup/signup_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -109,10 +112,9 @@ class _HomeState extends State<SignUp> {
                 decoration: BoxDecoration(),
                 curve: Curves.easeIn,
                 child: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      'https://www.publicdomainpictures.net/pictures/170000/velka/landschaft-1463581037RbE.jpg'),
-                  // child: ,
-                )),
+                    backgroundImage: AssetImage('assets/images/test.jpg')
+                    // child: ,
+                    )),
             ListTile(
               onTap: () {
                 Navigator.push(
@@ -260,11 +262,19 @@ class _HomeState extends State<SignUp> {
               TextFormField(
                 controller: password,
                 maxLines: 1,
-                obscureText: obscure!,
-                decoration: const InputDecoration(
-                  label: Text('Password'),
-                  prefixIcon: Icon(Icons.password_outlined),
-                ),
+                obscureText: !obscure,
+                decoration: InputDecoration(
+                    label: const Text('Password'),
+                    prefixIcon: const Icon(Icons.password_outlined),
+                    suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            obscure = !obscure;
+                          });
+                        },
+                        icon: obscure
+                            ? const Icon(Icons.visibility_off)
+                            : const Icon(Icons.visibility))),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter your email";
@@ -279,8 +289,10 @@ class _HomeState extends State<SignUp> {
                 children: [
                   TextButton.icon(
                       onPressed: () async {
-                        var gallery =
-                            await picker.pickImage(source: ImageSource.gallery);
+                        var gallery = await picker.pickImage(
+                            source: ImageSource.gallery,
+                            maxHeight: 150,
+                            maxWidth: 150);
                         if (gallery != null) {
                           setState(() {
                             // image = gallery;
@@ -318,16 +330,23 @@ class _HomeState extends State<SignUp> {
                     FilePickerResult? cvfile = await FilePicker.platform
                         .pickFiles(
                             type: FileType.custom, allowedExtensions: ['pdf']);
-                    if (cvfile != null) {
+                    if (cvfile != null && cvfile.files.single.path != null) {
+                      final pickedcv = File(cvfile.files.single.path!);
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      final newpath =
+                          '${directory.path}/${cvfile.files.single.name}';
+                      await pickedcv.copy(newpath);
                       setState(() {
-                        cv = File(cvfile.files.single.path!);
+                        cv = pickedcv;
+                        cvpath = newpath;
 
                         print('$cv');
                       });
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Signup successful'),
-                      ));
+                      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      //   content: Text('Signup successful'),
+                      // ));
                     }
                   },
                 ),
@@ -335,7 +354,7 @@ class _HomeState extends State<SignUp> {
               cv == null ? Container() : const Text('CV Uploaded'),
               ElevatedButton(
                   onPressed: () async {
-                    final prefs = await SharedPreferences.getInstance();
+                    // final prefs = await SharedPreferences.getInstance();
                     if (_formKey.currentState!.validate() && dob != null) {
                       String? imagebase64;
                       if (image != null) {
@@ -352,7 +371,7 @@ class _HomeState extends State<SignUp> {
                         fullname: fullname.text,
                         maritalstatus: maritalstatus ?? '',
                         email: email.text,
-                        dob: dob!.toString(),
+                        dob: dob?.toIso8601String() ?? '',
                         password: password.text,
                         mobile: mobile.text,
                         gender: gender ?? '',
@@ -369,7 +388,7 @@ class _HomeState extends State<SignUp> {
                         email.clear();
                         password.clear();
                         image = null;
-                        // cv = null;
+                        cv = null;
                       });
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Data Saved')),

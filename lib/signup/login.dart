@@ -1,6 +1,9 @@
-import 'package:day5/dashboard.dart';
-import 'package:day5/models/signup_model.dart';
-import 'package:day5/sharedforsignup.dart';
+// import 'package:day5/dashboard.dart';
+//  import 'package:day5/models/signup_model.dart';
+// import 'package:day5/sharedforsignup.dart';
+import 'package:day5/signup/dashboard.dart';
+import 'package:day5/signup/sharedforsignup.dart';
+import 'package:day5/signup/signup_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,10 +16,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: '',
       debugShowCheckedModeBanner: false,
-      home: const Login(),
+      home: Login(),
     );
   }
 }
@@ -44,9 +47,12 @@ class _HomeState extends State<Login> {
     });
   }
 
+  
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController confirmemail = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
+  bool obscure = false;
   SaveModel sModel = SaveModel();
 
   @override
@@ -59,7 +65,7 @@ class _HomeState extends State<Login> {
           ),
         ),
         body: Padding(
-          padding: EdgeInsets.all(25.0),
+          padding: const EdgeInsets.all(25.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -100,11 +106,19 @@ class _HomeState extends State<Login> {
                 TextFormField(
                   controller: confirmpassword,
                   maxLines: 1,
-                  // obscureText: obscure!,
-                  decoration: const InputDecoration(
-                    label: Text('Password'),
-                    prefixIcon: Icon(Icons.password_outlined),
-                  ),
+                  obscureText: !obscure,
+                  decoration: InputDecoration(
+                      label: const Text('Password'),
+                      prefixIcon: const Icon(Icons.password_outlined),
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscure = !obscure;
+                            });
+                          },
+                          icon: obscure
+                              ? const Icon(Icons.visibility_off)
+                              : const Icon(Icons.visibility))),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter your password";

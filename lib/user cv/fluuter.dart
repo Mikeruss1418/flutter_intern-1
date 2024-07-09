@@ -1,8 +1,12 @@
 
-import 'package:day5/models/for_project.dart';
-import 'package:day5/sharedpreferences.dart';
-import 'package:day5/widgets/pro.dart';
-import 'package:day5/widgets/work.dart';
+// import 'package:day5/models/for_project.dart';
+// import 'package:day5/sharedpreferences.dart';
+// import 'package:day5/widgets/pro.dart';
+// import 'package:day5/widgets/work.dart';
+import 'package:day5/user%20cv/models/for_project.dart';
+import 'package:day5/user%20cv/sharedpreferences.dart';
+import 'package:day5/user%20cv/widgets/pro.dart';
+import 'package:day5/user%20cv/widgets/work.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

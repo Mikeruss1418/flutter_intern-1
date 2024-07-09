@@ -1,6 +1,9 @@
-import 'package:day5/models/other_model.dart';
-import 'package:day5/project.dart';
-import 'package:day5/widgets/pro.dart';
+// import 'package:day5/models/other_model.dart';
+// import 'package:day5/project.dart';
+// import 'package:day5/widgets/pro.dart';
+import 'package:day5/user%20cv/models/other_model.dart';
+import 'package:day5/user%20cv/project.dart';
+import 'package:day5/user%20cv/widgets/pro.dart';
 import 'package:flutter/material.dart';
 
 class Otherproject extends StatefulWidget {
